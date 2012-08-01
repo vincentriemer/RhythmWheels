@@ -4,10 +4,8 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.net.URL;
-import javax.swing.JComboBox;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JRootPane;
+import java.util.ArrayList;
+import javax.swing.*;
 import rhythmwheels.soundcategories.SoundCategory;
 
 /*
@@ -29,6 +27,7 @@ public class RhythmWheel extends JRootPane implements ActionListener
      * This is the combo box that determines which set of sounds is played.
      */
     private JComboBox categoryBox;
+    //public static JFrame newFrame;
     public static int NUM_WHEELS = 3;
     public static int MAX_WHEELS = 3;
     public static final Color BACKGROUND_COLOR = Color.darkGray;
@@ -39,6 +38,7 @@ public class RhythmWheel extends JRootPane implements ActionListener
     private JLabel soundCatLabel;
     private JPanel top, mid, bottom, wheelContainer, tempBottom;
     private JLabel numWheelsLabel = new JLabel("   Number of Wheels: ");
+    //private JButton newButton = new JButton("New Category");
     private JComboBox numWheelsBox = new JComboBox(new Object[]
             {
                 "1", "2", "3"
@@ -114,13 +114,46 @@ public class RhythmWheel extends JRootPane implements ActionListener
             numWheelsLabel.setFont(smaller);
             numWheelsBox.setFont(smaller);
         }
-
+        
+        //custom category temporary code
+        /*
+        newFrame = new JFrame("New Category");
+        newFrame.setLayout(new GridLayout(0,1));        
+        JPanel firstPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        JPanel secondPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        JPanel thirdPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        JPanel fourthPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        JPanel fifthPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        newFrame.add(firstPanel);
+        newFrame.add(secondPanel);
+        newFrame.add(thirdPanel);
+        //newFrame.add(fourthPanel);
+        //newFrame.add(fifthPanel);
+        
+        JLabel nameLabel = new JLabel("Name:");
+        JLabel soundLabel = new JLabel("Select Sound:");
+        JTextField catNameText = new JTextField(20);
+        Object[] soundArray = Sound.installedSounds.keySet().toArray();
+        JComboBox soundsText = new JComboBox(soundArray);
+        JList soundList = new JList(soundArray);
+        soundList.setLayoutOrientation(JList.VERTICAL);
+        JScrollPane listScroller = new JScrollPane(soundList);
+        listScroller.setPreferredSize(new Dimension(200, 100));
+        firstPanel.add(nameLabel);
+        firstPanel.add(catNameText);
+        secondPanel.add(soundLabel);
+        secondPanel.add(soundsText);
+        thirdPanel.add(listScroller);
+        newFrame.setSize(500, 200);        
+        */
         top.add(numWheelsLabel);
         numWheelsBox.addActionListener(this);
         top.add(numWheelsBox);
         top.add(soundCatLabel);
         top.add(categoryBox);
-
+        //newButton.addActionListener(this);
+        //htop.add(newButton);
+        
         soundPanel = new SoundPanel(this, (SoundCategory) categoryBox.getSelectedItem());
 
         cp.add(top, BorderLayout.BEFORE_FIRST_LINE);
@@ -243,6 +276,13 @@ public class RhythmWheel extends JRootPane implements ActionListener
         {
             setNumWheels(Integer.parseInt((String) (numWheelsBox.getSelectedItem())));
         }
+        /*
+        else if (evt.getSource() == newButton)
+        {
+            newFrame.setVisible(true);
+        }
+        * 
+        */
     }
 
     /**
