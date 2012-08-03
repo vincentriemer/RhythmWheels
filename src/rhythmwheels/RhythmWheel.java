@@ -4,24 +4,23 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.net.URL;
-import java.util.ArrayList;
 import javax.swing.*;
 import rhythmwheels.soundcategories.SoundCategory;
 
 /*
  * Varun Madiath comments
- * 
- * NOTE: Future me - remove this comment when all the code in this project is well documented and
- * the code is refactored to have good coding practices.
- * 
- * If someone else must pick up this code before the above NOTE is removed, I'm terribly sorry.
- * When I got this, the code was a mess, I've tried to clean it up since. Hopefully you'll be able 
- * to finish the job, and actually make this something thats easy to modify.
+ *
+ * NOTE: Future me - remove this comment when all the code in this project is
+ * well documented and the code is refactored to have good coding practices.
+ *
+ * If someone else must pick up this code before the above NOTE is removed, I'm
+ * terribly sorry. When I got this, the code was a mess, I've tried to clean it
+ * up since. Hopefully you'll be able to finish the job, and actually make this
+ * something thats easy to modify.
  */
-public class RhythmWheel extends JRootPane implements ActionListener
-{
-    public static boolean isApplet = false;
+public class RhythmWheel extends JRootPane implements ActionListener {
 
+    public static boolean isApplet = false;
     public WheelPanel wheelPanels[];
     /**
      * This is the combo box that determines which set of sounds is played.
@@ -32,55 +31,44 @@ public class RhythmWheel extends JRootPane implements ActionListener
     public static int MAX_WHEELS = 3;
     public static final Color BACKGROUND_COLOR = Color.darkGray;
     public static final Color FOREGROUND_COLOR = Color.white;
-    
     //TODO: Evaluate if this is actually used anywhere.
     public static URL docBase;
     private JLabel soundCatLabel;
     private JPanel top, mid, bottom, wheelContainer, tempBottom;
     private JLabel numWheelsLabel = new JLabel("   Number of Wheels: ");
-    //private JButton newButton = new JButton("New Category");
-    private JComboBox numWheelsBox = new JComboBox(new Object[]
-            {
+    private JButton customSoundButton = new JButton("New Custom Sound");
+    public final JFileChooser fc = new JFileChooser();
+    private JComboBox numWheelsBox = new JComboBox(new Object[]{
                 "1", "2", "3"
             });
     public MyGlassPane myGlassPane;
-
     // TODO: Change this to a non-static private boolean.
     // And perhaps have the setLowRes perform changes to the UI that are needed on low-res screens.
     /**
-     * A boolean to represent whether the application is running on a screen which has a resolution
-     * of 800 x 600 or less.
+     * A boolean to represent whether the application is running on a screen
+     * which has a resolution of 800 x 600 or less.
      */
     public static boolean lowRes = false;
     public ControlsPanel controlPanel;
     private SoundPanel soundPanel;
 
-    static
-    {
-        if (Toolkit.getDefaultToolkit().getScreenSize().getWidth() < 801)
-        {
+    static {
+        if (Toolkit.getDefaultToolkit().getScreenSize().getWidth() < 801) {
             lowRes = true;
-        }
-        else
-        {
+        } else {
             lowRes = false;
         }
     }
 
-    public RhythmWheel(URL docbase)
-    {
-        if(docbase != null)
-        {
+    public RhythmWheel(URL docbase) {
+        if (docbase != null) {
             docBase = docbase;
             isApplet = true;
         }
-        if (isLowRes())
-        {
+        if (isLowRes()) {
             Sound.scaleFactor = 0.8;
 //            setSize(770, 550);
-        }
-        else
-        {
+        } else {
             Sound.scaleFactor = 1.0;
 //            setSize(800, 670);
         }
@@ -100,12 +88,11 @@ public class RhythmWheel extends JRootPane implements ActionListener
         categoryBox = new JComboBox(SoundCategory.installeCcategories.toArray());
         categoryBox.setUI(ColorArrowUI.createUI(categoryBox));
         numWheelsBox.setUI(ColorArrowUI.createUI(numWheelsBox));
-        
+
         categoryBox.setBackground(BACKGROUND_COLOR);
         categoryBox.setForeground(FOREGROUND_COLOR);
         categoryBox.addActionListener(this);
-        if (lowRes)
-        {
+        if (lowRes) {
             Font current = soundCatLabel.getFont();
             Font smaller = new Font(current.getName(), Font.PLAIN, current.getSize() - 2);
 
@@ -114,46 +101,17 @@ public class RhythmWheel extends JRootPane implements ActionListener
             numWheelsLabel.setFont(smaller);
             numWheelsBox.setFont(smaller);
         }
-        
-        //custom category temporary code
-        /*
-        newFrame = new JFrame("New Category");
-        newFrame.setLayout(new GridLayout(0,1));        
-        JPanel firstPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        JPanel secondPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        JPanel thirdPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        JPanel fourthPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        JPanel fifthPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        newFrame.add(firstPanel);
-        newFrame.add(secondPanel);
-        newFrame.add(thirdPanel);
-        //newFrame.add(fourthPanel);
-        //newFrame.add(fifthPanel);
-        
-        JLabel nameLabel = new JLabel("Name:");
-        JLabel soundLabel = new JLabel("Select Sound:");
-        JTextField catNameText = new JTextField(20);
-        Object[] soundArray = Sound.installedSounds.keySet().toArray();
-        JComboBox soundsText = new JComboBox(soundArray);
-        JList soundList = new JList(soundArray);
-        soundList.setLayoutOrientation(JList.VERTICAL);
-        JScrollPane listScroller = new JScrollPane(soundList);
-        listScroller.setPreferredSize(new Dimension(200, 100));
-        firstPanel.add(nameLabel);
-        firstPanel.add(catNameText);
-        secondPanel.add(soundLabel);
-        secondPanel.add(soundsText);
-        thirdPanel.add(listScroller);
-        newFrame.setSize(500, 200);        
-        */
+
         top.add(numWheelsLabel);
         numWheelsBox.addActionListener(this);
         top.add(numWheelsBox);
         top.add(soundCatLabel);
         top.add(categoryBox);
-        //newButton.addActionListener(this);
-        //htop.add(newButton);
-        
+
+        //custom sound button
+        customSoundButton.addActionListener(this);
+        top.add(customSoundButton);
+
         soundPanel = new SoundPanel(this, (SoundCategory) categoryBox.getSelectedItem());
 
         cp.add(top, BorderLayout.BEFORE_FIRST_LINE);
@@ -171,8 +129,7 @@ public class RhythmWheel extends JRootPane implements ActionListener
         bottom.setBackground(BACKGROUND_COLOR);
 
         wheelPanels = new WheelPanel[MAX_WHEELS];
-        for (int i = 0; i < MAX_WHEELS; i++)
-        {
+        for (int i = 0; i < MAX_WHEELS; i++) {
             WheelPanel w = new WheelPanel();
             //w.setBGColor(BACKGROUND_COLOR);
             w.wheel.setNumSounds(1);
@@ -184,9 +141,10 @@ public class RhythmWheel extends JRootPane implements ActionListener
         //       Rather start with NUM_WHEELS = 1, and MAX_WHEELS =3
         //       Then make everything use max wheels for the array.
 
-        /* Set the number of wheels to 1.  This changes NUM_WHEELS to 1.
-         * Don't want to start with NUM_WHEELS = 1 because other classes create
-         * arrays of size NUM_WHEELS
+        /*
+         * Set the number of wheels to 1. This changes NUM_WHEELS to 1. Don't
+         * want to start with NUM_WHEELS = 1 because other classes create arrays
+         * of size NUM_WHEELS
          */
         setNumWheels(1);
 
@@ -202,36 +160,31 @@ public class RhythmWheel extends JRootPane implements ActionListener
         myGlassPane.setVisible(true);
     }
 
-    public WheelPanel[] getWheelPanels()
-    {
+    public WheelPanel[] getWheelPanels() {
         return wheelPanels;
     }
 
     /**
      * Changes the number of wheels that are displayed in the user interface.
+     *
      * @param newNumWheels The new number of wheels to be displayed.
      */
-    public void setNumWheels(int newNumWheels)
-    {
-        if (wheelContainer != null)
-        {
+    public void setNumWheels(int newNumWheels) {
+        if (wheelContainer != null) {
             bottom.remove(wheelContainer);
         }
 
         wheelContainer = new JPanel(new FlowLayout(FlowLayout.CENTER));
         wheelContainer.setBackground(BACKGROUND_COLOR);
 
-        for (int w = 0; w < newNumWheels; w++)
-        {
-            if(w >= NUM_WHEELS)
-            {
+        for (int w = 0; w < newNumWheels; w++) {
+            if (w >= NUM_WHEELS) {
                 wheelPanels[w].wheel.setNumSounds(1);
             }
             wheelContainer.add(wheelPanels[w]);
         }
-        
-        for (int i = newNumWheels; i < wheelPanels.length; i++)
-        {
+
+        for (int i = newNumWheels; i < wheelPanels.length; i++) {
             wheelPanels[i].wheel.setNumSounds(0);
         }
 
@@ -241,74 +194,74 @@ public class RhythmWheel extends JRootPane implements ActionListener
     }
 
     /**
-     * Checks if the application is running on a low resolution screen. A low resolution screen
-     * is one which has a resolution of 800 x 600 or less.
-     * @return true, if the application is running on a low resolution screen, false otherwise.
+     * Checks if the application is running on a low resolution screen. A low
+     * resolution screen is one which has a resolution of 800 x 600 or less.
+     *
+     * @return true, if the application is running on a low resolution screen,
+     * false otherwise.
      */
-    public static boolean isLowRes()
-    {
+    public static boolean isLowRes() {
         return lowRes;
     }
 
-     /**
+    /**
      * @param aLowRes the lowRes to set
      */
-    public void setLowRes(boolean aLowRes)
-    {
+    public void setLowRes(boolean aLowRes) {
         lowRes = aLowRes;
     }
 
     /**
      * Handles the events for the categoryBox and the numWheelsBox.
+     *
      * @param evt An event triggered by either categoryBox or numWheelsBox.
      */
-    public void actionPerformed(ActionEvent evt)
-    {
-        if (evt.getSource() == categoryBox)
-        {
+    public void actionPerformed(ActionEvent evt) {
+        if (evt.getSource() == categoryBox) {
             mid.remove(soundPanel);
             soundPanel = new SoundPanel(this, (SoundCategory) categoryBox.getSelectedItem());
             mid.add(soundPanel);
             mid.revalidate();
             repaint();
-        }
-        else if (evt.getSource() == numWheelsBox)
-        {
+        } else if (evt.getSource() == numWheelsBox) {
             setNumWheels(Integer.parseInt((String) (numWheelsBox.getSelectedItem())));
+        } else if (evt.getSource() == customSoundButton) {
+            //ask for the file name of the sound
+            String fileName = (String) JOptionPane.showInputDialog(
+                    "Enter the file name of the custom sound");
+            String displayName = (String) JOptionPane.showInputDialog(
+                    "Enter the display name of the custom sound");
+
+            //get and store sound into "installed sounds"
+            Sound customSound = new Sound(fileName, displayName, 3);
+            Sound.installedSounds.put(fileName, customSound);
+
+            //add sound to the custom sounds soudcategory
+            SoundCategory.installeCcategories.get(3).addSound(fileName, customSound);
         }
-        /*
-        else if (evt.getSource() == newButton)
-        {
-            newFrame.setVisible(true);
-        }
-        * 
-        */
     }
 
     /**
      * Sets the background and foreground of a component.
+     *
      * @param c The component to modify.
      * @param b The new background color for the component.
      * @param f The new foreground color for the component.
      */
-    public static void changeComponent(Component c, Color b, Color f)
-    {
+    public static void changeComponent(Component c, Color b, Color f) {
         c.setBackground(b);
         c.setForeground(f);
     }
-    
-    public void setDropDownValue(int index)
-    {
+
+    public void setDropDownValue(int index) {
         numWheelsBox.setSelectedIndex(index - 1);
     }
-    
-    public void unlockNumWheels()
-    {
+
+    public void unlockNumWheels() {
         numWheelsBox.setEnabled(true);
     }
-    
-    public void lockNumWheels()
-    {
+
+    public void lockNumWheels() {
         numWheelsBox.setEnabled(false);
     }
 }

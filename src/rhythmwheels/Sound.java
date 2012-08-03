@@ -91,7 +91,9 @@ public class Sound implements Cloneable, Serializable
     {
         AudioClip ac = null;
         URL u;
-        ac = java.applet.Applet.newAudioClip(RhythmWheel.class.getResource(soundFileName));
+        u = RhythmWheel.class.getResource(soundFileName);
+        System.out.println(u);
+        ac = java.applet.Applet.newAudioClip(u);
         return ac;
     }
 

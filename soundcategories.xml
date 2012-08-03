@@ -128,4 +128,8 @@
             </sound>
         </sounds>
     </soundcategory>
+    <soundcategory>
+        <name>Custom Category</name>
+        <sounds></sounds>
+    </soundcategory>
 </soundcategories>
