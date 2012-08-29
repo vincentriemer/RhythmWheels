@@ -3,6 +3,7 @@ package rhythmwheels;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 import java.net.URL;
 import javax.swing.*;
 import rhythmwheels.soundcategories.SoundCategory;
@@ -226,18 +227,21 @@ public class RhythmWheel extends JRootPane implements ActionListener {
         } else if (evt.getSource() == numWheelsBox) {
             setNumWheels(Integer.parseInt((String) (numWheelsBox.getSelectedItem())));
         } else if (evt.getSource() == customSoundButton) {
-            //ask for the file name of the sound
-            String fileName = (String) JOptionPane.showInputDialog(
-                    "Enter the file name of the custom sound");
-            String displayName = (String) JOptionPane.showInputDialog(
-                    "Enter the display name of the custom sound");
+            int returnVal = fc.showOpenDialog(null);
 
-            //get and store sound into "installed sounds"
-            Sound customSound = new Sound(fileName, displayName, 3);
-            Sound.installedSounds.put(fileName, customSound);
+            if (returnVal == JFileChooser.APPROVE_OPTION) {
+                File file = fc.getSelectedFile();
+                
+                String displayName = (String) JOptionPane.showInputDialog(
+                        "Enter the display name of the custom sound");
 
-            //add sound to the custom sounds soudcategory
-            SoundCategory.installeCcategories.get(3).addSound(fileName, customSound);
+                //get and store sound into "installed sounds"
+                Sound customSound = new Sound(file, displayName);
+                Sound.installedSounds.put(customSound.strFileBaseName, customSound);
+
+                //add sound to the custom sounds soudcategory
+                SoundCategory.installeCcategories.get(3).addSound(displayName, customSound);
+            }
         }
     }
 

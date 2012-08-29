@@ -6,6 +6,7 @@ import java.awt.geom.Line2D;
 import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.logging.Level;
@@ -82,6 +83,30 @@ public class Sound implements Cloneable, Serializable
         }
 
     }
+    
+    /**
+     * Constructor for custom sound creation
+     * @param  customSoundFile the sound file
+     * @param displayName the name displayed to the user
+     */
+    public Sound(File customSoundFile, String customDisplayName){
+        strFileBaseName = customSoundFile.getName();
+        soundFileName = customSoundFile.getAbsolutePath(); //"images/hihat.png"
+        imageFileName = "images/hihat.png";
+        audioClip = getAudioClip();
+        displayName = customDisplayName;
+        maxVolume = 3;
+        
+        audioClip = getAudioClip();
+        try
+        {
+            soundGraphic = ImageIO.read(new File(imageFileName));
+        }
+        catch (IOException ex)
+        {
+            Logger.getLogger(Sound.class.getName()).log(Level.SEVERE, imageFileName, ex);
+        }
+    }
 
     /**
      * Returns the AudioClip associated with this Sound object.
@@ -90,12 +115,16 @@ public class Sound implements Cloneable, Serializable
     public AudioClip getAudioClip()
     {
         AudioClip ac = null;
-        URL u;
-        u = RhythmWheel.class.getResource(soundFileName);
-        System.out.println(u);
-        ac = java.applet.Applet.newAudioClip(u);
+        try {
+            //URL u;
+            //u = RhythmWheel.class.getResource(soundFileName);
+            //System.out.println(u);
+            ac = java.applet.Applet.newAudioClip(new URL("file:" + soundFileName));
+        } catch (MalformedURLException ex) {
+            Logger.getLogger(Sound.class.getName()).log(Level.SEVERE, null, ex);
+        }
         return ac;
-    }
+    }   
 
     /**
      * Increments the volume level. If the volume is currently at the highest supported level, then
