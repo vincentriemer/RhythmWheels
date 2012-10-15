@@ -14,34 +14,28 @@ import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 
 /**
- * 
+ *
  * @author Varun Madiath (vamega@gmail.com)
  */
-public class Sound implements Cloneable, Serializable
-{
+public class Sound implements Cloneable, Serializable {
 
     protected final static BasicStroke mediumStroke = new BasicStroke(2.0f);
     protected static Color SOUND_COLOR = Color.cyan;
     protected Color backgroundColor = Color.black;
-    protected static int SOUND_LENGTH = 250; // milliseconds
+    protected static int SOUND_LENGTH = 1000; // milliseconds
     public String soundFileName;       // such as sounds/clap1.au
     public String imageFileName;       // such as images/clap.png
     protected AudioClip audioClip;          // such as clap
     public String strFileBaseName;
     public String displayName;
-    
     public static HashMap<String, Sound> installedSounds = new HashMap<String, Sound>();
-    
     public Image soundGraphic;
-    
     protected static final int WIDTH = 50;
     protected static final int HEIGHT = 50;
-    
     // Number of volumes this sound has
     public int maxVolume;
     // 1 is default - softest
     protected int volumeLevel = 1;
-    
     // This point is used to determin the current location of the sound and has something to do
     // With it's rendering in the glassPane. I'm not really sure what, but will update this when I
     // Figure it out.
@@ -54,66 +48,56 @@ public class Sound implements Cloneable, Serializable
     public static final String IMAGE_EXTENSION = ".png";
     public static double scaleFactor = 1.0; // For low resolution screens
 
-    public Sound(String fileName)
-    {
+    public Sound(String fileName) {
         this(fileName, null, 3);
     }
-    
-    public Sound(String fileName, String displayName)
-    {
+
+    public Sound(String fileName, String displayName) {
         this(fileName, displayName, 3);
     }
-    
-    public Sound(String fileName, String displayName, int maxVolume)
-    {
+
+    public Sound(String fileName, String displayName, int maxVolume) {
         strFileBaseName = fileName;
         soundFileName = SOUND_DIR + strFileBaseName + volumeLevel + SOUND_EXTENSION;
         imageFileName = IMAGE_DIR + strFileBaseName + IMAGE_EXTENSION;
         this.displayName = displayName;
         this.maxVolume = maxVolume;
-        
+
         audioClip = getAudioClip();
-        try
-        {
+        try {
             soundGraphic = ImageIO.read(new File(imageFileName));
-        }
-        catch (IOException ex)
-        {
+            Icon tempIcon = new Icon(soundGraphic);
+            Icon.installedIcons.put(displayName, tempIcon);
+        } catch (IOException ex) {
             Logger.getLogger(Sound.class.getName()).log(Level.SEVERE, imageFileName, ex);
         }
 
     }
-    
+
     /**
      * Constructor for custom sound creation
-     * @param  customSoundFile the sound file
+     *
+     * @param customSoundFile the sound file
      * @param displayName the name displayed to the user
      */
-    public Sound(File customSoundFile, String customDisplayName){
+    public Sound(File customSoundFile, String customDisplayName, Icon customIcon) {
         strFileBaseName = customSoundFile.getName();
-        soundFileName = customSoundFile.getAbsolutePath(); //"images/hihat.png"
-        imageFileName = "images/hihat.png";
-        audioClip = getAudioClip();
+        soundFileName = customSoundFile.getAbsolutePath();
+        imageFileName = "";
         displayName = customDisplayName;
         maxVolume = 3;
-        
+
         audioClip = getAudioClip();
-        try
-        {
-            soundGraphic = ImageIO.read(new File(imageFileName));
-        }
-        catch (IOException ex)
-        {
-            Logger.getLogger(Sound.class.getName()).log(Level.SEVERE, imageFileName, ex);
-        }
+        soundGraphic = customIcon.icon;
+
     }
 
     /**
      * Returns the AudioClip associated with this Sound object.
+     *
      * @return The AudioClip associated with this Sound object.
      */
-    public AudioClip getAudioClip()
-    {
+    public AudioClip getAudioClip() {
         AudioClip ac = null;
         try {
             //URL u;
@@ -124,38 +108,35 @@ public class Sound implements Cloneable, Serializable
             Logger.getLogger(Sound.class.getName()).log(Level.SEVERE, null, ex);
         }
         return ac;
-    }   
+    }
 
     /**
-     * Increments the volume level. If the volume is currently at the highest supported level, then
-     * the volume is reset to 1.
+     * Increments the volume level. If the volume is currently at the highest
+     * supported level, then the volume is reset to 1.
      */
-    public void cycleVolume()
-    {
-        if (!setVolume(volumeLevel + 1))
-        {
+    public void cycleVolume() {
+        if (!setVolume(volumeLevel + 1)) {
             setVolume(1);
         }
         play();
     }
 
     /**
-     * Sets the volume of this Sound. If the supplied volume is not in the range of [1, MAX_VOLUME]
-     * then nothing is changed.
+     * Sets the volume of this Sound. If the supplied volume is not in the range
+     * of [1, MAX_VOLUME] then nothing is changed.
+     *
      * @param volume The new volume for the sound
-     * @return true if the volume changed as a result of this call, false otherwise.
+     * @return true if the volume changed as a result of this call, false
+     * otherwise.
      */
-    public boolean setVolume(int volume)
-    {
-        if (1 <= volume && volume <= maxVolume)
-        {
+    public boolean setVolume(int volume) {
+        if (1 <= volume && volume <= maxVolume) {
             volumeLevel = volume;
             soundFileName = SOUND_DIR + strFileBaseName + volumeLevel + SOUND_EXTENSION;
             audioClip = getAudioClip();
 
             // Change the background color
-            switch (volumeLevel)
-            {
+            switch (volumeLevel) {
                 case 2:
                     backgroundColor = Color.darkGray.darker().darker().darker();
                     break;
@@ -166,9 +147,7 @@ public class Sound implements Cloneable, Serializable
                     backgroundColor = Color.black;
             }
             return true;
-        }
-        else
-        {
+        } else {
             return false;
         }
 
@@ -176,25 +155,21 @@ public class Sound implements Cloneable, Serializable
 
     /**
      * Returns the volume of this Sound.
+     *
      * @return the volume of this Sound.
      */
-    public int getVolume()
-    {
+    public int getVolume() {
         return volumeLevel;
     }
-    
+
     /*
      * This method need to be implemented, otherwise it doesn't show up when dragging it off the 
      * sound panel onto the wheel.
      */
-    public Object clone()
-    {
-        try
-        {
+    public Object clone() {
+        try {
             return super.clone();
-        }
-        catch (CloneNotSupportedException e)
-        {
+        } catch (CloneNotSupportedException e) {
             e.printStackTrace();
             return null;
         }
@@ -203,70 +178,67 @@ public class Sound implements Cloneable, Serializable
     /**
      * Plays the AudioClip associated with this Sound.
      */
-    public void play()
-    {
+    public void play() {
         audioClip.play();
     }
 
-    public void setPoint(Point point)
-    {
+    public void setPoint(Point point) {
         p = point;
     }
 
-    public void setCenter(Point point)
-    {
+    public void setCenter(Point point) {
         cp = point;
     }
 
     /**
      * The current center of this sound.
+     *
      * @return The current center of this sound.
      */
-    public Point getCenter()
-    {
+    public Point getCenter() {
         return cp;
     }
 
     /**
      * Returns the width of Sound graphic.
+     *
      * @return the width of Sound graphic.
      */
-    public static final int getWidth()
-    {
+    public static final int getWidth() {
         return WIDTH;
     }
 
     /**
      * Returns the width of Sound graphic.
+     *
      * @return the width of Sound graphic.
      */
-    public static final int getHeight()
-    {
+    public static final int getHeight() {
         return HEIGHT;
     }
 
     /**
      * The filename of the sound associated with this Sound Object.
-     * @return 
+     *
+     * @return
      */
-    public String getStrFileBaseName()
-    {
+    public String getStrFileBaseName() {
         return strFileBaseName;
     }
 
     /**
-     * Draws the Triangle outline for the Sound object, and then calls the paintMe method
-     * to paint the Sound specific graphic.
+     * Draws the Triangle outline for the Sound object, and then calls the
+     * paintMe method to paint the Sound specific graphic.
+     *
      * @param g The graphics object to draw the triangle onto.
      */
-    public final void paint(Graphics g)
-    {
+    public final void paint(Graphics g) {
         // Draws the black triangle
         Graphics2D g2 = (Graphics2D) g;
-        
+
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         g2.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
-        
+
         g2.scale(scaleFactor, scaleFactor);
         Point p1 = new Point(4 + p.x, 4 + p.y);
         Point p2 = new Point(WIDTH - 4 + p.x, 4 + p.y);
@@ -295,16 +267,15 @@ public class Sound implements Cloneable, Serializable
     }
 
     /**
-     * This method should be overridden by Individual sound subclasses to draw themselves to the 
-     * screen.
+     * This method should be overridden by Individual sound subclasses to draw
+     * themselves to the screen.
+     *
      * @param g The graphics object to draw the representation to.
      */
-    public void paintMe(Graphics g)
-    {
+    public void paintMe(Graphics g) {
     }
-    
-    public void paintSound(Graphics g)
-    {
+
+    public void paintSound(Graphics g) {
         g.translate(p.x, p.y);
         g.drawImage(soundGraphic, 16, 8, null);
         g.translate(-p.x, -p.y);

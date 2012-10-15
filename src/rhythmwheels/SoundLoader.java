@@ -34,8 +34,7 @@ public class SoundLoader
             }
             
             Sound currentSound = new Sound(name, displayName, maxVolume);
-            Sound.installedSounds.put(name, currentSound);
-            
+            Sound.installedSounds.put(name, currentSound);            
         }
     }
 }

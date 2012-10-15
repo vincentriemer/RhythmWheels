@@ -229,18 +229,40 @@ public class RhythmWheel extends JRootPane implements ActionListener {
         } else if (evt.getSource() == customSoundButton) {
             int returnVal = fc.showOpenDialog(null);
 
-            if (returnVal == JFileChooser.APPROVE_OPTION) {
+            if (returnVal == JFileChooser.APPROVE_OPTION) 
+            {                
                 File file = fc.getSelectedFile();
                 
                 String displayName = (String) JOptionPane.showInputDialog(
                         "Enter the display name of the custom sound");
+                
+                //Get the Icon Names
+                Object[] icons = Icon.installedIcons.keySet().toArray();
+                
+                //Prompt user to choose Icon
+                String selectedIconName = (String)JOptionPane.showInputDialog(
+                        null,
+                        "Select an Icon:",
+                        "Input",
+                        JOptionPane.INFORMATION_MESSAGE, null,
+                        icons, icons[0]);
+                
+                //Get the selected Icon
+                Icon selectedIcon = Icon.installedIcons.get(selectedIconName);
 
                 //get and store sound into "installed sounds"
-                Sound customSound = new Sound(file, displayName);
+                Sound customSound = new Sound(file, displayName, selectedIcon);
                 Sound.installedSounds.put(customSound.strFileBaseName, customSound);
 
                 //add sound to the custom sounds soudcategory
                 SoundCategory.installeCcategories.get(3).addSound(displayName, customSound);
+                
+                //Refresh the current soundPanel in case it is the custom sound category
+                mid.remove(soundPanel);
+                soundPanel = new SoundPanel(this, (SoundCategory) categoryBox.getSelectedItem());
+                mid.add(soundPanel);
+                mid.revalidate();
+                repaint();
             }
         }
     }
