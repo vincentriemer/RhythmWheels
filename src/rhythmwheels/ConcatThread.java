@@ -68,7 +68,7 @@ class ConcatThread extends Thread
         String delayFile = null;
         if (sliderVal > 0)
         {
-            delayFile = "sounds/blank" + sliderVal + Sound.SOUND_EXTENSION;
+            delayFile = "sounds/blank" + sliderVal + ".wav";
         }
 
         for (int w = 0; w < rhythmWheel.NUM_WHEELS; w++)

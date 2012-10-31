@@ -90,8 +90,8 @@ public class AudioConcat
             AudioInputStream audioInputStream = null;
             try
             {
-                InputStream is;
-
+                InputStream is;                
+                
                 is = RhythmWheel.class.getResourceAsStream(fileName);
 
                 ByteArrayInputStream bis = new ByteArrayInputStream(StreamUtil.toByteArray(is));

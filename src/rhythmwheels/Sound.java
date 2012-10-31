@@ -12,6 +12,8 @@ import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
+import org.apache.commons.io.FileUtils;
+
 
 /**
  *
@@ -44,7 +46,7 @@ public class Sound implements Cloneable, Serializable {
     public int MAX_SOUND_SIZE = 100000;
     public static String SOUND_DIR = "sounds/";
     public static String IMAGE_DIR = "images/";
-    public static final String SOUND_EXTENSION = ".au";
+    public static final String SOUND_EXTENSION = ".wav";
     public static final String IMAGE_EXTENSION = ".png";
     public static double scaleFactor = 1.0; // For low resolution screens
 
@@ -80,9 +82,16 @@ public class Sound implements Cloneable, Serializable {
      * @param customSoundFile the sound file
      * @param displayName the name displayed to the user
      */
-    public Sound(File customSoundFile, String customDisplayName, Icon customIcon) {
-        strFileBaseName = customSoundFile.getName();
+    public Sound(File customSoundFile, String customDisplayName, Icon customIcon) throws IOException {
+        strFileBaseName = getBaseName(customSoundFile);
         soundFileName = customSoundFile.getAbsolutePath();
+        
+        //copying the file to custom_sound folder
+        File customFile = new File(soundFileName);
+        File targetDir = new File(RhythmWheel.class.getResource("custom_sounds").toString().substring(6));
+        FileUtils.copyFileToDirectory(customFile, targetDir);
+        soundFileName = "custom_sounds/" + customFile.getName();
+        
         imageFileName = "";
         displayName = customDisplayName;
         maxVolume = 3;
@@ -90,6 +99,35 @@ public class Sound implements Cloneable, Serializable {
         audioClip = getAudioClip();
         soundGraphic = customIcon.icon;
 
+    }
+
+    private static String getExtension(File f) {
+        String ext = null;
+        String s = f.getName();
+        int i = s.lastIndexOf('.');
+
+        if (i > 0 && i < s.length() - 1) {
+            ext = s.substring(i).toLowerCase();
+        }
+
+        if (ext == null) {
+            return "";
+        }
+        return ext;
+    }
+    
+    private static String getBaseName(File f){
+        String baseName = null;
+        String s = f.getName();
+        int i = s.lastIndexOf('.');
+        if (i > 0 && i < s.length() - 1) {
+            baseName = s.substring(0,i);
+        }
+
+        if (baseName == null) {
+            return "";
+        }
+        return baseName;
     }
 
     /**
