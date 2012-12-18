@@ -88,7 +88,7 @@ public class Sound implements Cloneable, Serializable {
         
         //copying the file to custom_sound folder
         File customFile = new File(soundFileName);
-        File targetDir = new File(RhythmWheel.class.getResource("custom_sounds").toString().substring(6));
+        File targetDir = new File(RhythmWheel.class.getResource("custom_sounds").toString().substring(5));
         FileUtils.copyFileToDirectory(customFile, targetDir);
         soundFileName = "custom_sounds/" + customFile.getName();
         
