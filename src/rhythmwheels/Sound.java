@@ -24,7 +24,7 @@ public class Sound implements Cloneable, Serializable {
     protected final static BasicStroke mediumStroke = new BasicStroke(2.0f);
     protected static Color SOUND_COLOR = Color.cyan;
     protected Color backgroundColor = Color.black;
-    protected static int SOUND_LENGTH = 1000; // milliseconds
+    protected static int SOUND_LENGTH = 250; // milliseconds
     public String soundFileName;       // such as sounds/clap1.au
     public String imageFileName;       // such as images/clap.png
     protected AudioClip audioClip;          // such as clap
