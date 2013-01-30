@@ -15,7 +15,7 @@
             <sound>
                 <name>scratch2</name>
                 <displayName>Scratch 2</displayName>
-            </sound>    
+            </sound>
             <sound>
                 <name>scratch3</name>
                 <displayName>Scratch 3</displayName>
@@ -84,7 +84,7 @@
             <sound>
                 <name>tamborine</name>
                 <displayName>Tamborine</displayName>
-            </sound>            
+            </sound>
         </sounds>
     </soundcategory>
     <soundcategory>
@@ -125,6 +125,31 @@
             <sound>
                 <name>crash</name>
                 <displayName>Crash</displayName>
+            </sound>
+        </sounds>
+    </soundcategory>
+    <soundcategory>
+        <name>Electro</name>
+        <sounds>
+            <sound>
+                <name>electrocowbell</name>
+                <displayName>Electro Cowbell</displayName>
+            </sound>
+            <sound>
+                <name>electrotap</name>
+                <displayName>Electro Tap</displayName>
+            </sound>
+            <sound>
+                <name>electroclap</name>
+                <displayName>Electro Clap</displayName>
+            </sound>
+            <sound>
+                <name>electrokick</name>
+                <displayName>Electro Kick</displayName>
+            </sound>
+            <sound>
+                <name>electrosnare</name>
+                <displayName>Electro Snare</displayName>
             </sound>
         </sounds>
     </soundcategory>

@@ -68,7 +68,7 @@
     <sound>
         <name>scratch2</name>
         <displayName>Scratch 2</displayName>
-    </sound>    
+    </sound>
     <sound>
         <name>scratch1</name>
         <displayName>Scratch 1</displayName>
@@ -105,5 +105,25 @@
     <sound>
         <name>openhighconga</name>
         <displayName>Open High Conga</displayName>
+    </sound>
+    <sound>
+        <name>electrocowbell</name>
+        <displayName>Electro Cowbell</displayName>
+    </sound>
+    <sound>
+        <name>electrotap</name>
+        <displayName>Electro Tap</displayName>
+    </sound>
+    <sound>
+        <name>electroclap</name>
+        <displayName>Electro Clap</displayName>
+    </sound>
+    <sound>
+        <name>electrokick</name>
+        <displayName>Electro Kick</displayName>
+    </sound>
+    <sound>
+        <name>electrosnare</name>
+        <displayName>Electro Snare</displayName>
     </sound>
 </sounds>
