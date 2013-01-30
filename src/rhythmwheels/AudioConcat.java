@@ -2,6 +2,7 @@ package rhythmwheels;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -55,7 +56,7 @@ public class AudioConcat
 
         try
         {
-            AudioSystem.write(audioInputStream, AudioFileFormat.Type.AU, bos);
+            AudioSystem.write(audioInputStream, AudioFileFormat.Type.WAVE, bos);
             audioInputStream.close();
         }
         catch (IOException e)
@@ -93,6 +94,12 @@ public class AudioConcat
                 InputStream is;                
                 
                 is = RhythmWheel.class.getResourceAsStream(fileName);
+                if ( is == null ) {
+                    is = new FileInputStream( new File( fileName ) );
+                    if ( is == null ) {
+                        System.out.println( "boosh" );
+                    }
+                }
 
                 ByteArrayInputStream bis = new ByteArrayInputStream(StreamUtil.toByteArray(is));
                 audioInputStream = AudioSystem.getAudioInputStream(bis);
@@ -116,7 +123,7 @@ public class AudioConcat
 
         try
         {
-            AudioSystem.write(audioInputStream, AudioFileFormat.Type.AU, bos);
+            AudioSystem.write(audioInputStream, AudioFileFormat.Type.WAVE, bos);
             audioInputStream.close();
         }
         catch (IOException e)
